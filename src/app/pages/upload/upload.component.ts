@@ -100,7 +100,33 @@ export class UploadComponent implements OnInit {
       .withFaceLandmarks()
       .withFaceDescriptor();
 
-    console.log(detection);
+    if (typeof detection === 'undefined') {
+
+
+      imageContainer.querySelector('.status').innerText = 'No se pudo procesar la imagen';
+      imageContainer.querySelector('.status').style.color = 'red';
+
+      setTimeout(() => {
+        imageContainer.querySelector('.status').innerText = '';
+        this.imgURL = '../../../assets/img/noimage.png';
+        this.imagenesForm.reset();
+
+      }, 2000);
+
+      this.btnActive = false;
+
+    } else {
+
+      imageContainer.querySelector('.status').innerText = 'Procesado';
+      imageContainer.querySelector('.status').style.color = 'blue';
+      
+
+      setTimeout(() => {
+        imageContainer.querySelector('.status').innerText = '';
+        this.onSubmit();
+      }, 3000);
+
+    }
 
   };
 
