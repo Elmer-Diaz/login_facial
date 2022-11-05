@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "loginfacial": {
+      "hosting": {
+        "deteccionFacial": [
+          "loginfacial"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "loginfacial"
+  }
+}
