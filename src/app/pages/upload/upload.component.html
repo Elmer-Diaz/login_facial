@@ -17,8 +17,8 @@
                         <hr style="border-color:azure">
                         <form (ngSubmit)="onSubmit()" [formGroup]="imagenesForm">
                             <div class="form-group">
-                                <input type="file" class="form-control-file" class="form-control-file"
-                                    formControlName="imgFile" accept="image/*">
+                            <input type="file" class="form-control-file" formControlName="imgFile" class="form-control-file"
+                                formControlName="imgFile" accept="image/*" (change)="selectImage($event)">
                                 <button type="submit" class="btn btn-outline-secondary mt-3">Upload</button>
                             </div>
                         </form>

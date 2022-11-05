@@ -30,5 +30,10 @@ export class UploadComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  selectImage(event: any){
+
+    console.log(event)
+  }
+
   onSubmit() {}
 }
