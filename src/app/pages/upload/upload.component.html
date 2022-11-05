@@ -19,7 +19,7 @@
                             <div class="form-group">
                             <input type="file" class="form-control-file" formControlName="imgFile" class="form-control-file"
                                 formControlName="imgFile" accept="image/*" (change)="selectImage($event)">
-                                <button type="submit" class="btn btn-outline-secondary mt-3">Upload</button>
+                            <button type="submit" class="btn btn-outline-secondary mt-3" [disabled]="btnActive">Upload</button>
                             </div>
                         </form>
                     </div>
