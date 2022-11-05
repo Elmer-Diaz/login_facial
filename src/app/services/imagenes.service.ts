@@ -58,5 +58,15 @@ export class ImagenesService {
   }
 
   async guardarImagen(imagen:{nombreImagen:string, imgUrl:string}):Promise<any>{
+    try {
+      return await this.db.collection('imagenes').add(imagen);
+    } catch (err) {
+      console.log(err);
+    }
   }
+
+
+
+
+  
 }

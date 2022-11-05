@@ -42,13 +42,11 @@ export class UploadComponent implements OnInit {
 
   selectImage(event: any) {
     if (event.target.files.length > 0) {
-
       this.file = event.target.files;
       const reader = new FileReader();
       reader.readAsDataURL(this.file[0]);
 
       reader.onloadend = (event: any) => {
-
         this.imgURL = event.target.result;
         this.imgElement = event.target.result;
         elementImage.src = `${this.imgElement}`;
@@ -84,11 +82,8 @@ export class UploadComponent implements OnInit {
       this.renderer.appendChild(this.imageFile.nativeElement, containerImage);
 
       this.processFace(this.imgProcess, containerImage);
-
     }
   }
-
-
 
   processFace = async (image: any, imageContainer: any) => {
     await faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models');
@@ -101,34 +96,72 @@ export class UploadComponent implements OnInit {
       .withFaceDescriptor();
 
     if (typeof detection === 'undefined') {
-
-
-      imageContainer.querySelector('.status').innerText = 'No se pudo procesar la imagen';
+      imageContainer.querySelector('.status').innerText =
+        'No se pudo procesar la imagen';
       imageContainer.querySelector('.status').style.color = 'red';
 
       setTimeout(() => {
         imageContainer.querySelector('.status').innerText = '';
         this.imgURL = '../../../assets/img/noimage.png';
         this.imagenesForm.reset();
-
       }, 2000);
 
       this.btnActive = false;
-
     } else {
-
       imageContainer.querySelector('.status').innerText = 'Procesado';
       imageContainer.querySelector('.status').style.color = 'blue';
-      
 
       setTimeout(() => {
         imageContainer.querySelector('.status').innerText = '';
         this.onSubmit();
       }, 3000);
-
     }
-
   };
 
-  onSubmit() {}
+  onSubmit() {
+    Swal.fire({
+      title: 'Introducir el nombre de la imagen',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off',
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        let cargarImagenDatos: any = {
+          nombreImagen: result.value,
+        };
+
+        this.imagenesSvc.cargarImagenesFirebase(this.imagen, cargarImagenDatos);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'La imagen se cargo',
+          text: 'En breve aparecera la imagen cargada',
+        }).then((result) => {
+          if (result) {
+            this.imgURL = '../../../assets/img/noimage.png';
+            this.imagenesForm.reset();
+          }
+        });
+      } else {
+        if (!result.isConfirmed && !result.value) {
+          location.reload();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Debe llenar el nombre',
+            confirmButtonText: 'OK',
+          }).then((result) => {
+            this.imagenesForm.reset();
+          });
+        }
+      }
+    });
+  }
+
+  
 }
