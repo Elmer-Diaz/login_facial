@@ -9,10 +9,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { DeteccionComponent } from './pages/deteccion/deteccion.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore'; 
 import { environment } from '../environments/environment';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-import { provideStorage,getStorage } from '@angular/fire/storage';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,17 +21,17 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
     IdentificarComponent,
     NavbarComponent,
     HomeComponent,
-    DeteccionComponent
+    DeteccionComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule,
     AppRoutingModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage())
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
