@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <img class="img-fluid"  [src]="imgURL"  class="card-img-top">
                         <hr style="border-color:azure">
-                        <form>
+                        <form (ngSubmit)="onSubmit()" [formGroup]="imagenesForm">
                             <div class="form-group">
                                 <input type="file" class="form-control-file" class="form-control-file"
                                     formControlName="imgFile" accept="image/*">
