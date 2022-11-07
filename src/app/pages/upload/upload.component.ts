@@ -38,7 +38,9 @@ export class UploadComponent implements OnInit {
     private imagenesSvc: ImagenesService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.mostrarImg();
+  }
 
   selectImage(event: any) {
     if (event.target.files.length > 0) {
@@ -110,13 +112,25 @@ export class UploadComponent implements OnInit {
     } else {
       imageContainer.querySelector('.status').innerText = 'Procesado';
       imageContainer.querySelector('.status').style.color = 'blue';
+      this.onSubmit();
 
       setTimeout(() => {
         imageContainer.querySelector('.status').innerText = '';
-        this.onSubmit();
       }, 3000);
     }
   };
+
+  mostrarImg() {
+    this.imagenesSvc.getImagenes().subscribe((res) => {
+      this.imagenesData = [];
+
+      res.forEach((element: ImagenesModel) => {
+        this.imagenesData.push({
+          ...element,
+        });
+      });
+    });
+  }
 
   onSubmit() {
     Swal.fire({
@@ -163,5 +177,18 @@ export class UploadComponent implements OnInit {
     });
   }
 
+  eliminar(id: any, nombreImagen: string) {
+    Swal.fire({
+      icon: 'question',
+      title: 'Desea eliminar el registro?',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.imagenesSvc.eliminarImagen(id, nombreImagen);
+      }
+    });
+  }
   
 }

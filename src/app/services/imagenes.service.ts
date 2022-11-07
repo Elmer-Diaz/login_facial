@@ -21,43 +21,56 @@ export class ImagenesService {
     this.imagenesCollection = db.collection<ImagenesModel>('imagenes');
   }
 
-  getImagenes() {}
+  getImagenes(): Observable<ImagenesModel[]> {
+    return this.imagenesCollection.snapshotChanges().pipe(
+      map((actions) =>
+        actions.map((a) => {
+          const data = a.payload.doc.data() as ImagenesModel;
+          const id = a.payload.doc.id;
+
+          return { id, ...data };
+        })
+      )
+    );
+  }
 
   cargarImagenesFirebase(imagen: FileItems, imagesData: ImagenesModel) {
-
     const storage = getStorage();
     let item = imagen;
     let imagenTrim = imagesData.nombreImagen;
 
-    const storageRef = ref(storage, `${this.CARPETA_IMAGENES}/${imagenTrim.replace(/ /g, '')}`);
+    const storageRef = ref(
+      storage,
+      `${this.CARPETA_IMAGENES}/${imagenTrim.replace(/ /g, '')}`
+    );
     const uploadTask = uploadBytesResumable(storageRef, item.archivo);
 
-    uploadTask.on('state_changed', (snapshot) =>{
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-      this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-      console.log(this.progress);
-
-
-    },(err)=>{
-      console.log('Error al subir archivo', err);
-    },()=>{
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL)=>{
-
-        item.url = downloadURL;
-        this.guardarImagen({
-          nombreImagen: imagesData.nombreImagen,
-          imgUrl: item.url,
+        console.log(this.progress);
+      },
+      (err) => {
+        console.log('Error al subir archivo', err);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          item.url = downloadURL;
+          this.guardarImagen({
+            nombreImagen: imagesData.nombreImagen,
+            imgUrl: item.url,
+          });
         });
-      });
-    }
-    
-    )
-
-
+      }
+    );
   }
 
-  async guardarImagen(imagen:{nombreImagen:string, imgUrl:string}):Promise<any>{
+  async guardarImagen(imagen: {
+    nombreImagen: string;
+    imgUrl: string;
+  }): Promise<any> {
     try {
       return await this.db.collection('imagenes').add(imagen);
     } catch (err) {
@@ -65,8 +78,22 @@ export class ImagenesService {
     }
   }
 
+  public eliminarImagen(id: string, imagenNombre: string) {
+    const storage = getStorage();
 
+    const deleteImg = ref(
+      storage,
+      `${this.CARPETA_IMAGENES}/${imagenNombre.replace(/ /g, '')}`
+    );
 
+    deleteObject(deleteImg)
+      .then(() => {
+        Swal.fire('EXITO', 'El registro se elimino correctamente', 'success');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
-  
+    return this.imagenesCollection.doc(id).delete();
+  }
 }
