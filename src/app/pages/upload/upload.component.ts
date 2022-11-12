@@ -134,13 +134,13 @@ export class UploadComponent implements OnInit {
 
   onSubmit() {
     Swal.fire({
-      title: 'Introducir el nombre de la imagen',
+      title: 'Nombre del estudiante',
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off',
       },
       showCancelButton: true,
-      confirmButtonText: 'Guardar',
+      confirmButtonText: 'Save',
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed && result.value) {
@@ -152,8 +152,8 @@ export class UploadComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'La imagen se cargo',
-          text: 'En breve aparecera la imagen cargada',
+          title: 'El estudiante se registró correctamente',
+          text: 'En la clase de Diseño de Interfaces',
         }).then((result) => {
           if (result) {
             this.imgURL = '../../../assets/img/noimage.png';
@@ -180,9 +180,9 @@ export class UploadComponent implements OnInit {
   eliminar(id: any, nombreImagen: string) {
     Swal.fire({
       icon: 'question',
-      title: 'Desea eliminar el registro?',
+      title: '¿Desea eliminar el estudiante?',
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: 'Delete',
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
