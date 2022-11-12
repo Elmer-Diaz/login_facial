@@ -92,7 +92,7 @@ export class ImagenesService {
 
     deleteObject(deleteImg)
       .then(() => {
-        Swal.fire('EXITO', 'El registro se elimino correctamente', 'success');
+        Swal.fire('EXITO', 'El estudiante se elimino correctamente', 'success');
       })
       .catch((err) => {
         console.error(err);
